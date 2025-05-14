@@ -22,6 +22,11 @@ jobs:
       - name: Install Node.js dependencies
         run: |
           npm install
+          # Muestra los logs si hay errores
+          if [ $? -ne 0 ]; then
+            cat /home/runner/.npm/_logs/*debug*.log
+            exit 1
+          fi
 
       - name: Start Node.js app in the background
         run: |
