@@ -1,51 +1,28 @@
-name: Run Selenium Python Tests
+name: Node.js CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  selenium-tests:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '18'  # O la versión de Node.js que estés usando
 
-      - name: Install Node.js dependencies
-        run: |
-          npm install
-          # Muestra los logs si hay errores
-          if [ $? -ne 0 ]; then
-            cat /home/runner/.npm/_logs/*debug*.log
-            exit 1
-          fi
+      - name: Install dependencies
+        run: npm install
 
-      - name: Start Node.js app in the background
-        run: |
-          npm start &
-          # Esperar hasta que el servidor esté listo
-          until curl --silent --fail http://localhost:3000/; do
-            echo "Esperando a que el servidor esté disponible..."
-            sleep 5
-          done
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - name: Install Python dependencies
-        run: |
-          pip install --upgrade pip
-          pip install selenium webdriver_manager
-
-      - name: Run Selenium tests
-        run: python test/CasoPrueba1.py
+      - name: Run Jest tests
+        run: npm run test -- --testPathPattern=./test/formulario.test.jsx
