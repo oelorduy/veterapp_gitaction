@@ -75,5 +75,5 @@ except TimeoutException as e:
 except Exception as e:
     print(f"⚠️ Error inesperado: {e}")
 
-input("Presiona ENTER para cerrar el navegador...")
+#input("Presiona ENTER para cerrar el navegador...")
 driver.quit()
