@@ -27,7 +27,8 @@ jobs:
       - name: Start Node.js app in background
         run: |
           npm start &
-          sleep 5
+          # Espera 10 segundos para asegurar que el servidor esté corriendo
+          sleep 10
 
       - name: Set up Python
         uses: actions/setup-python@v4
