@@ -1,8 +1,3 @@
-#Caso de Prueba 1 - Crear cita con datos válidos
-#En este caso se automatiza el ingreso de los campos mascota,propietario
-#email, fecha de cita formato AAAA-MM-DD igual o mayor al dia de hoy
-#y el campo observaciones
-#se crearon excepciones para errores inesperados en ejecucion de la prueba.
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -11,10 +6,19 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, UnexpectedAlertPresentException
+import tempfile
+import os
 
 # Crear opciones del navegador
 options = Options()
 options.add_argument("--start-maximized")
+options.add_argument("--headless")  # <-- Asegúrate de usar headless
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+
+# Especificar un directorio único para --user-data-dir
+unique_temp_dir = tempfile.mkdtemp()
+options.add_argument(f"--user-data-dir={unique_temp_dir}")
 
 # Configurar el driver
 driver = webdriver.Chrome(
@@ -23,7 +27,7 @@ driver = webdriver.Chrome(
 )
 
 try:
-    # Abrir una url host:3000
+    # Abrir la URL
     driver.get("http://localhost:3000/")
     time.sleep(2)
     #Ingresa nombre de mascota
@@ -39,9 +43,9 @@ try:
     driver.find_element(By.ID, "cita").send_keys("2025" + Keys.ARROW_RIGHT + "05-30")
     time.sleep(2)
     #Ingresa observaciones del paciente
-    driver.find_element(By.ID, "observaciones").send_keys("colitis de 4 dias de evolucion")
+    driver.find_element(By.ID, "observaciones").send_keys("colitis de 4 días de evolución")
     time.sleep(2)
-     #Click al boton de agregar
+    #Click al botón de agregar
     driver.find_element(By.ID, "agregar").click()
     time.sleep(3)
 
@@ -75,5 +79,5 @@ except TimeoutException as e:
 except Exception as e:
     print(f"⚠️ Error inesperado: {e}")
 
-#input("Presiona ENTER para cerrar el navegador...")
+# No bloquea la ejecución, y cierra automáticamente el navegador
 driver.quit()
