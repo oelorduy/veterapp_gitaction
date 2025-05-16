@@ -36,7 +36,7 @@ export const Formulario = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validaciones
+    // Validacionesss
     if (nombre.trim() === "") {
       alert("El campo nombre está vacío");
       setError(true);
